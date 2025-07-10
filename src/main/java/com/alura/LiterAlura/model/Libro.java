@@ -1,18 +1,33 @@
 package com.alura.LiterAlura.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "libros")
 public class Libro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+    @Column(unique = true)
     private String titulo;
+    private String nombreAutor;
+    @ManyToOne
     private Autor autor;
+    @Enumerated(EnumType.STRING)
     private Idioma idioma;
     private int numeroDescargas;
 
     public Libro() {}
 
-    public Libro(String titulo, Autor autor, Idioma idioma, int numeroDescargas) {
-        this.titulo = titulo;
-        this.autor = autor;
-        this.idioma = idioma;
-        this.numeroDescargas = numeroDescargas;
+    public Libro(DatosLibro datosLibro) {
+        this.titulo = datosLibro.titulo();
+        this.nombreAutor = datosLibro.autor().get(0).nombre();
+        this.autor = datosLibro.autor().stream()
+                .map(Autor::new)
+                .findFirst()
+                .orElse(null);
+        this.idioma = datosLibro.idioma().get(0);
+        this.numeroDescargas = datosLibro.numeroDescargas();
     }
 
     public String getTitulo() {

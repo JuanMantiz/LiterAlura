@@ -20,20 +20,14 @@ public class Principal {
     }
 
     public void getLibro() {
-        var json = consumoAPI.obtenerDatos(URL + "gfghgcdfghcgf");
+        var json = consumoAPI.obtenerDatos(URL + "pride");
         System.out.println(json);
 
         DatosResultado datosResultado = conversorDatos.obtenerDatos(json,DatosResultado.class);
         if (datosResultado.cuenta() != 0) {
             DatosLibro primerLibro = datosResultado.resultado().get(0);
-            Autor autor = new Autor(primerLibro.autor().get(0).nombre(), primerLibro.autor().get(0).anioDeNacimiento(), primerLibro.autor().get(0).anioDeFallecimiento());
-            Libro libro = new Libro(primerLibro.titulo(), autor, primerLibro.idioma().get(0), primerLibro.numeroDescargas());
-/*            Optional<Libro> otroLibro = datosResultado.resultado().stream()
-                    .map(l -> new Libro(l.titulo(),  l.autor().stream()
-                            .map(a -> new Autor(a.nombre(), a.anioDeNacimiento(), a.anioDeFallecimiento()))
-                            .findFirst(),l.idioma().get(0), l.numeroDescargas()))
-                    .findFirst();
-            };*/
+            Autor autor = new Autor(primerLibro.autor().get(0));
+            Libro libro = new Libro(primerLibro);
             System.out.println(datosResultado);
             System.out.println(primerLibro);
             System.out.println(libro);
